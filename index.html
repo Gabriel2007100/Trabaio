@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DinoZombie Mars</title>
+<style>
+    body {
+        font-family: 'Courier New', Courier, monospace;
+        background-color: #222;
+        color: #fff;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        position: relative;
+    }
+
+    h1 {
+        font-size: 36px;
+        margin-top: 20px;
+    }
+
+    p {
+        font-size: 20px;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+
+    #output {
+        margin-top: 20px;
+        font-size: 20px;
+        position: relative;
+    }
+
+    button {
+        background-color: #444;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        margin: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        border-radius: 5px;
+    }
+
+    button:hover {
+        background-color: #666;
+    }
+
+    button:focus {
+        outline: none;
+    }
+
+    #options {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .blood {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background-color: #8B0000;
+        border-radius: 50%;
+    }
+
+    .vine {
+        position: absolute;
+        width: 2px;
+        height: 60px;
+        background-color: #228B22;
+        transform: rotate(45deg);
+    }
+
+    .boss-img {
+        display: none;
+        position: absolute;
+        bottom: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 200px;
+        height: auto;
+        z-index: 1;
+    }
+</style>
+</head>
+<body>
+<h1>DinoZombie Mars</h1>
+<p>Bem-vindo ao mundo dos dinossauros zumbis em Marte! Você é um sobrevivente em um planeta dominado por dinossauros zumbis. Você encontrou uma antiga estação de pesquisa abandonada. O que você gostaria de fazer?</p>
+<div id="output"></div>
+<button onclick="startGame()">Começar</button>
+
+<script>
+let playerHP = 100;
+let bossHP = 150;
+
+function startGame() {
+    const output = document.getElementById('output');
+    output.innerHTML = 'Você é um sobrevivente em Marte. Dinossauros zumbis estão dominando o planeta. Você precisa tomar decisões para sobreviver.';
+    const choices = [
+        { text: 'Explorar a Estação de Pesquisa', nextText: 'exploreStation' },
+        { text: 'Buscar Suprimentos', nextText: 'searchSupplies' },
+        { text: 'Descansar um Pouco', nextText: 'rest' }
+    ];
+    showOptions(choices);
+}
+
+function showOptions(options) {
+    const output = document.getElementById('output');
+    output.innerHTML += '<div id="options"></div>';
+    const optionsDiv = document.getElementById('options');
+    options.forEach(option => {
+        const button = document.createElement('button');
+        button.innerText = option.text;
+        button.addEventListener('click', () => selectOption(option.nextText));
+        optionsDiv.appendChild(button);
+    });
+}
+
+function selectOption(nextText) {
+    const output = document.getElementById('output');
+    output.innerHTML = '';
+    switch (nextText) {
+        case 'exploreStation':
+            output.innerHTML = 'Você decide explorar a estação de pesquisa abandonada. Encontra salas escuras e corredores misteriosos. De repente, um rugido ecoa nas proximidades...';
+            const choicesExplore = [
+                { text: 'Investigar o Rugido', nextText: 'investigateRoar' },
+                { text: 'Retornar à Entrada', nextText: 'returnEntrance' },
+                { text: 'Procurar uma Arma', nextText: 'searchWeapon' }
+            ];
+            showOptions(choicesExplore);
+            break;
+        case 'searchSupplies':
+            output.innerHTML = 'Você decide procurar por suprimentos na estação de pesquisa. Encontra algumas provisões básicas, mas nada substancial.';
+            const choicesSupplies = [
+                { text: 'Continuar Procurando', nextText: 'continueSearch' },
+                { text: 'Retornar à Entrada', nextText: 'returnEntrance' }
+            ];
+            showOptions(choicesSupplies);
+            break;
+        case 'rest':
+            output.innerHTML = 'Você decide descansar um pouco na estação de pesquisa. Encontra um lugar relativamente seguro para relaxar.';
+            const choicesRest = [
+                { text: 'Continuar Descansando', nextText: 'continueRest' },
+                { text: 'Explorar a Estação', nextText: 'exploreStation' }
+            ];
+            showOptions(choicesRest);
+            break;
+        case 'investigateRoar':
+            output.innerHTML = 'Você se aproxima do local do rugido. De repente, um tiranossauro vermelho aparece diante de você, soltando raios laser pelos olhos!';
+            const choicesRoar = [
+                { text: 'Lutar contra o Tiranossauro', nextText: 'fightBoss' },
+                { text: 'Fugir', nextText: 'runAway' }
+            ];
+            showOptions(choicesRoar);
+            break;
+        case 'returnEntrance':
+            output.innerHTML = 'Você decide retornar à entrada da estação de pesquisa.';
+            startGame();
+            break;
+        case 'searchWeapon':
+            output.innerHTML = 'Você procura uma arma na estação de pesquisa, mas não encontra nada útil.';
+            const choicesWeapon = [
+                { text: 'Explorar a Estação', nextText: 'exploreStation' },
+                { text: 'Retornar à Entrada', nextText: 'returnEntrance' }
+            ];
+            showOptions(choicesWeapon);
+            break;
+        case 'continueSearch':
+            output.innerHTML = 'Você continua procurando por suprimentos na estação de pesquisa.';
+            startGame();
+            break;
+        case 'continueRest':
+            output.innerHTML = 'Você decide descansar um pouco mais.';
+            startGame();
+            break;
+        case 'fightBoss':
+            output.innerHTML = 'Você decide lutar contra o tiranossauro vermelho!';
+            const choicesFight = [
+                { text: 'Atacar', nextText: 'attack' },
+                { text: 'Desviar', nextText: 'dodge' }
+            ];
+            showOptions(choicesFight);
+            const bossImg = document.createElement('img');
+            bossImg.src = 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fbr.freepik.com%2Ffotos-premium%2Fhomem-dinossauro-cavalgando-de-volta-fogo-frontal-zombie-horror-magia-cartao-de-reuniao-princesa-rex-lava-em-erupcao_83570731.htm&psig=AOvVaw2pJ_KR1qtfjRKJPQz9FATZ&ust=1711915938417000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCMj0zfvlnIUDFQAAAAAdAAAAABAI';
+            bossImg.alt = 'Dinossauro Zumbi';
+            bossImg.classList.add('boss-img');
+            output.appendChild(bossImg);
+            break;
+        case 'runAway':
+            output.innerHTML = 'Você decide fugir e retornar à entrada da estação de pesquisa.';
+            const escapeSpaceshipImg = document.createElement('img');
+            escapeSpaceshipImg.src = 'https://cdn.pixabay.com/photo/2018/04/09/15/06/space-3304408_960_720.jpg';
+            escapeSpaceshipImg.alt = 'Nave Espacial';
+            escapeSpaceshipImg.style.width = '300px';
+            output.appendChild(escapeSpaceshipImg);
+            setTimeout(() => {
+                output.innerHTML += '<br>Uma nave espacial chega para resgatá-lo!';
+                setTimeout(() => {
+                    output.innerHTML += '<br>Enquanto você foge, um outro dinossauro zumbi atira um raio laser pelos olhos e explode a espaçonave!';
+                    output.innerHTML += '<br>Você foi derrotado!';
+                }, 3000);
+            }, 2000);
+            break;
+        case 'attack':
+            const playerAttackChance = Math.random();
+            if (playerAttackChance <= 0.65) {
+                const playerDamage = Math.floor(Math.random() * 20) + 10;
+                bossHP -= playerDamage;
+                output.innerHTML = `Você ataca o dinossauro zumbi, causando ${playerDamage} de dano!`;
+                if (bossHP <= 0) {
+                    output.innerHTML += ' Você derrotou o dinossauro zumbi!';
+                    const restartButton = document.createElement('button');
+                    restartButton.innerText = 'Recomeçar';
+                    restartButton.addEventListener('click', startGame);
+                    output.appendChild(restartButton);
+                } else {
+                    bossAttack();
+                }
+            } else {
+                output.innerHTML = 'Você errou o ataque!';
+                bossAttack();
+            }
+            break;
+        case 'dodge':
+            const playerDodgeChance = Math.random();
+            if (playerDodgeChance <= 0.4) {
+                output.innerHTML = 'Você consegue desviar do ataque do dinossauro zumbi!';
+                bossAttack();
+            } else {
+                const bossDamage = Math.floor(Math.random() * 20) + 10;
+                playerHP -= bossDamage;
+                output.innerHTML = `Você falhou ao tentar desviar e sofre ${bossDamage} de dano!`;
+                if (playerHP <= 0) {
+                    output.innerHTML += ' Você foi derrotado pelo dinossauro zumbi!';
+                    const restartButton = document.createElement('button');
+                    restartButton.innerText = 'Recomeçar';
+                    restartButton.addEventListener('click', startGame);
+                    output.appendChild(restartButton);
+                } else {
+                    showOptions([{ text: 'Atacar', nextText: 'attack' }, { text: 'Desviar', nextText: 'dodge' }]);
+                }
+            }
+            break;
+        default:
+            output.innerHTML = 'Escolha não reconhecida. Tente novamente.';
+            break;
+    }
+}
+
+function bossAttack() {
+    const bossAttackChance = Math.random();
+    if (bossAttackChance <= 0.4) {
+        const bossDamage = Math.floor(Math.random() * 20) + 10;
+        playerHP -= bossDamage;
+        output.innerHTML += `<br>O dinossauro zumbi ataca você, causando ${bossDamage} de dano!`;
+        if (playerHP <= 0) {
+            output.innerHTML += '<br>Você foi derrotado pelo dinossauro zumbi!';
+            const restartButton = document.createElement('button');
+            restartButton.innerText = 'Recomeçar';
+            restartButton.addEventListener('click', startGame);
+            output.appendChild(restartButton);
+        } else {
+            showOptions([{ text: 'Atacar', nextText: 'attack' }, { text: 'Desviar', nextText: 'dodge' }]);
+        }
+    } else {
+        output.innerHTML += '<br>O dinossauro zumbi errou o ataque!';
+        showOptions([{ text: 'Atacar', nextText: 'attack' }, { text: 'Desviar', nextText: 'dodge' }]);
+    }
+}
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const marsSurface = document.getElementById('output');
+    const bloodStains = 10;
+
+    for (let i = 0; i < bloodStains; i++) {
+        const blood = document.createElement('div');
+        blood.className = 'blood';
+        blood.style.top = Math.random() * marsSurface.offsetHeight + 'px';
+        blood.style.left = Math.random() * marsSurface.offsetWidth + 'px';
+        marsSurface.appendChild(blood);
+    }
+});
+</script>
+</body>
+</html>
